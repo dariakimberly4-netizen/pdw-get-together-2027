@@ -227,3 +227,23 @@ The QR stores only:
 `PDW2027 | Registration ID | random validation token`
 
 It does not put the attendee's name, mobile number, email, or accessibility information inside the QR code.
+
+
+## Staff Offline Mode + Reports
+
+The GitHub version now includes an upgraded Staff Check-In page with:
+
+- Offline roster download to the event device
+- Offline attendee search
+- Offline QR/manual check-in queue
+- Sync Now when internet returns
+- Unsynced action counter and last-sync time
+- Clear Offline Data for privacy after the event
+- Live attendance report
+- Attendance rate, pending/no-show count, companions, assistance requests
+- Participant breakdown and staff activity
+- CSV export
+
+Important: the offline mode works after the Staff Check-In page has already been opened and the roster has been downloaded at least once while online. Keep the page open if venue internet becomes unstable.
+
+These files are the GitHub source version. The separate Floot production site is not automatically updated by GitHub commits.
