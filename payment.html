@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#3f1768">
+<title>Get Together 2027 — Payment Confirmation</title>
+<style>
+:root{
+  --purple:#4b1f73;
+  --purple2:#6d3b91;
+  --lav:#f4eef9;
+  --ink:#201928;
+  --muted:#706878;
+  --line:#e6dcec;
+  --white:#fff;
+  --gold:#b8903f;
+  --green:#2f7a52;
+  --red:#a64242;
+  --shadow:0 18px 50px rgba(45,21,63,.12);
+}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#f7f2fb 0%,#fff 46%,#f7f2fb 100%);
+  color:var(--ink);
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+.wrap{width:min(100%,680px);margin:auto;padding:18px 16px 40px}
+.hero{
+  background:linear-gradient(145deg,var(--purple),#31104d);
+  color:#fff;
+  border-radius:26px;
+  padding:28px 22px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;border:1px solid rgba(255,255,255,.15);border-radius:50%;
+  right:-70px;top:-65px;
+  box-shadow:0 0 0 36px rgba(255,255,255,.035),0 0 0 72px rgba(255,255,255,.02)
+}
+.kicker{font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:#ead7f7}
+h1{font-size:clamp(2rem,8vw,3rem);line-height:1;margin:.45rem 0 .35rem}
+.theme{font-size:1rem;line-height:1.45;color:#f2e9f8;max-width:520px}
+.fee{
+  display:inline-flex;gap:10px;align-items:center;margin-top:18px;padding:10px 14px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;font-weight:800
+}
+.card{background:var(--white);border:1px solid var(--line);border-radius:24px;padding:22px;margin-top:16px;box-shadow:0 10px 35px rgba(55,30,70,.07)}
+.card h2{margin:0 0 5px;font-size:1.35rem}
+.sub{color:var(--muted);font-size:.9rem;line-height:1.45;margin:0 0 18px}
+.field{margin:0 0 17px}
+label{display:block;font-weight:800;margin-bottom:7px;font-size:.94rem}
+.req{color:#873760}
+input,select{
+  width:100%;min-height:54px;border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;color:var(--ink);outline:none
+}
+input:focus,select:focus{border-color:var(--purple2);box-shadow:0 0 0 4px rgba(109,59,145,.10)}
+.amountbox{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--lav);border:1px solid #e5d8ee;border-radius:16px;padding:15px 16px}
+.amountbox span{color:var(--muted);font-size:.88rem}.amountbox strong{font-size:1.45rem;color:var(--purple)}
+.upload{
+  border:2px dashed #cbb8d9;border-radius:18px;padding:22px 16px;text-align:center;background:#fcfaff;cursor:pointer;display:block
+}
+.upload:hover{border-color:var(--purple2)}
+.uploadIcon{width:54px;height:54px;margin:auto auto 10px;border-radius:16px;background:var(--lav);display:grid;place-items:center;font-size:1.45rem;color:var(--purple)}
+.upload strong{display:block}.upload small{display:block;color:var(--muted);margin-top:6px;line-height:1.35}
+#proof{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.preview{display:none;margin-top:12px;border:1px solid var(--line);border-radius:15px;padding:10px;background:#fff}
+.preview.show{display:flex;gap:11px;align-items:center}
+.preview img{width:68px;height:68px;object-fit:cover;border-radius:10px;background:#eee}
+.preview .fileIcon{width:68px;height:68px;border-radius:10px;background:var(--lav);display:grid;place-items:center;font-weight:900;color:var(--purple)}
+.previewText{min-width:0}.previewText b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.previewText small{color:var(--muted)}
+.notice{font-size:.82rem;line-height:1.45;color:var(--muted);background:#faf7fc;border-radius:13px;padding:11px 12px;margin:4px 0 18px}
+.submit{
+  width:100%;min-height:58px;border:0;border-radius:16px;background:var(--purple);color:#fff;font-weight:900;cursor:pointer;
+  box-shadow:0 10px 24px rgba(75,31,115,.22)
+}
+.submit:active{transform:translateY(1px)}
+.submit[disabled]{opacity:.6;cursor:not-allowed}
+.statusCard{display:none;text-align:center;padding:28px 20px}
+.statusCard.show{display:block}
+.check{width:68px;height:68px;border-radius:50%;background:#e8f5ed;color:var(--green);display:grid;place-items:center;margin:0 auto 13px;font-size:2rem;font-weight:900}
+.ref{font-family:monospace;font-weight:900;font-size:1.05rem;background:#f7f2fa;border-radius:12px;padding:10px;margin:14px auto;display:inline-block}
+.pending{color:#855e16;font-weight:800}
+.back{display:inline-block;margin-top:12px;color:var(--purple);font-weight:800;text-decoration:none}
+.mini{font-size:.76rem;color:var(--muted);text-align:center;margin:16px 6px 0;line-height:1.4}
+.error{display:none;color:var(--red);font-size:.82rem;margin-top:8px;font-weight:700}.error.show{display:block}
+@media(max-width:520px){html{font-size:17px}.wrap{padding:12px 11px 32px}.hero{border-radius:22px;padding:24px 18px}.card{border-radius:20px;padding:18px}.upload{padding:20px 12px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">Parkinson's Disease Warriors Philippines</div>
+    <h1>GET TOGETHER 2027</h1>
+    <div class="theme">Payment Confirmation for Participants</div>
+    <div class="fee">Food Contribution <strong>₱350</strong></div>
+  </section>
+
+  <section class="card" id="formCard">
+    <h2>Submit your payment</h2>
+    <p class="sub">If you have already paid, enter your information and upload a clear screenshot or photo of your proof of payment.</p>
+
+    <form id="paymentForm">
+      <div class="field">
+        <label for="fullName">Full Name <span class="req">*</span></label>
+        <input id="fullName" name="fullName" autocomplete="name" required placeholder="Enter your full name">
+      </div>
+
+      <div class="field">
+        <label for="participantType">Participant Type <span class="req">*</span></label>
+        <select id="participantType" name="participantType" required>
+          <option value="">Select participant type</option>
+          <option>PD Warrior / Patient</option>
+          <option>Companion</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Amount Paid</label>
+        <div class="amountbox"><span>Get Together 2027 food contribution</span><strong>₱350</strong></div>
+      </div>
+
+      <div class="field">
+        <label for="paymentMethod">Payment Method <span class="req">*</span></label>
+        <select id="paymentMethod" name="paymentMethod" required>
+          <option value="">Select payment method</option>
+          <option>GCash</option>
+          <option>Bank Transfer</option>
+          <option>Cash</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="referenceNumber">Reference Number</label>
+        <input id="referenceNumber" name="referenceNumber" inputmode="text" placeholder="GCash/bank reference number, if available">
+      </div>
+
+      <div class="field">
+        <label>Proof of Payment <span class="req">*</span></label>
+        <label class="upload" for="proof">
+          <div class="uploadIcon">↑</div>
+          <strong>Tap to upload proof of payment</strong>
+          <small>Screenshot, photo or PDF • maximum 10 MB</small>
+        </label>
+        <input id="proof" name="proof" type="file" accept="image/*,.pdf,application/pdf" required>
+        <div class="preview" id="preview"></div>
+        <div class="error" id="fileError">Please upload a valid image or PDF up to 10 MB.</div>
+      </div>
+
+      <div class="notice">Your submission will be reviewed by the Treasurer. A submitted payment is not considered verified until the Treasurer confirms the proof of payment.</div>
+
+      <button class="submit" id="submitBtn" type="submit">SUBMIT PAYMENT</button>
+    </form>
+  </section>
+
+  <section class="card statusCard" id="successCard" aria-live="polite">
+    <div class="check">✓</div>
+    <h2>Payment submitted</h2>
+    <p class="sub">Thank you. Your payment information and proof have been prepared for Treasurer verification.</p>
+    <div class="pending">Status: PENDING VERIFICATION</div><br>
+    <div class="ref" id="receiptCode"></div>
+    <p class="sub">Please save your reference code for your records.</p>
+    <a class="back" href="payment.html">Submit another payment</a>
+  </section>
+
+  <p class="mini">GET TOGETHER 2027 • Participant Payment Confirmation</p>
+</main>
+<script>
+const form=document.getElementById('paymentForm');
+const proof=document.getElementById('proof');
+const preview=document.getElementById('preview');
+const fileError=document.getElementById('fileError');
+const submitBtn=document.getElementById('submitBtn');
+const MAX=10*1024*1024;
+let selectedFile=null;
+
+proof.addEventListener('change',()=>{
+  fileError.classList.remove('show');
+  preview.classList.remove('show');
+  preview.innerHTML='';
+  selectedFile=proof.files && proof.files[0] ? proof.files[0] : null;
+  if(!selectedFile)return;
+  const validType=selectedFile.type.startsWith('image/') || selectedFile.type==='application/pdf' || selectedFile.name.toLowerCase().endsWith('.pdf');
+  if(!validType || selectedFile.size>MAX){
+    selectedFile=null;
+    proof.value='';
+    fileError.classList.add('show');
+    return;
+  }
+  const size=(selectedFile.size/1024/1024).toFixed(2)+' MB';
+  if(selectedFile.type.startsWith('image/')){
+    const url=URL.createObjectURL(selectedFile);
+    preview.innerHTML='<img alt="Proof preview" src="'+url+'"><div class="previewText"><b></b><small>'+size+'</small></div>';
+  }else{
+    preview.innerHTML='<div class="fileIcon">PDF</div><div class="previewText"><b></b><small>'+size+'</small></div>';
+  }
+  preview.querySelector('b').textContent=selectedFile.name;
+  preview.classList.add('show');
+});
+
+function makeRef(){
+  const d=new Date();
+  const date=d.getFullYear().toString().slice(-2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  return 'GT27-'+date+'-'+Math.random().toString(36).slice(2,7).toUpperCase();
+}
+
+form.addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  if(!form.reportValidity())return;
+  if(!selectedFile){fileError.classList.add('show');return;}
+  submitBtn.disabled=true;
+  submitBtn.textContent='SUBMITTING…';
+
+  // GitHub Pages is a static host. This initial participant page validates the form
+  // and proof file on-device. Connect this form to the event's Google Apps Script
+  // endpoint to permanently save participant data and upload proof to Google Drive.
+  const submission={
+    fullName:document.getElementById('fullName').value.trim(),
+    participantType:document.getElementById('participantType').value,
+    amount:350,
+    paymentMethod:document.getElementById('paymentMethod').value,
+    referenceNumber:document.getElementById('referenceNumber').value.trim(),
+    fileName:selectedFile.name,
+    submittedAt:new Date().toISOString(),
+    status:'Pending Verification',
+    receiptCode:makeRef()
+  };
+  try{localStorage.setItem('gt27-last-payment',JSON.stringify(submission));}catch(_){ }
+  document.getElementById('receiptCode').textContent=submission.receiptCode;
+  document.getElementById('formCard').style.display='none';
+  document.getElementById('successCard').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
